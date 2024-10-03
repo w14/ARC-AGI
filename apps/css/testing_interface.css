@@ -26,6 +26,16 @@ body {
     min-height: 850px;
 }
 
+@media (max-width: 1150px) {
+  #demonstration_examples_view {
+    float: none;
+  }
+
+  #evaluation_view {
+    float: none;
+  }
+}
+
 #evaluation-input-view {
     float: left;
     width: 400px;
