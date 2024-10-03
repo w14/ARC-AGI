@@ -138,13 +138,19 @@ function loadJSONTask(train, test) {
 }
 
 function display_task_name(task_name, task_index, number_of_tasks) {
-    big_space = '&nbsp;'.repeat(4); 
+    big_space = '&nbsp;'.repeat(4);
+    window.current_task_name = task_name;
     document.getElementById('task_name').innerHTML = (
         'Task name:' + big_space + task_name + big_space + (
             task_index===null ? '' :
-            ( String(task_index) + ' out of ' + String(number_of_tasks) )
+            ( `<input name=task_index value=${task_index} style='width: 24px'>` + ' out of ' + String(number_of_tasks) )
         )
     );
+    document.getElementById('task_name').querySelector('[name=task_index]').onkeydown = (e) => {
+        if (e.key === 'Enter') {
+            goToIndexInInput()
+        }
+    }
 }
 
 function loadTaskFromFile(e) {
@@ -198,6 +204,74 @@ function randomTask() {
     .error(function(){
       errorMsg('Error loading task list');
     });
+}
+
+function nextTask() {
+    var subset = "training";
+    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+        var old_index = tasks.findIndex(task => task.name === current_task_name)
+        var task_index
+        if (current_task_name === undefined) {
+            task_index = 0
+        } else if (old_index === tasks.length - 1) {
+            alert("Completed all tasks! Restarting from the beginning")
+            task_index = 0
+        } else {
+            task_index = old_index + 1
+        }
+
+        var task = tasks[task_index];
+        $.getJSON(task["download_url"], function(json) {
+            try {
+                train = json['train'];
+                test = json['test'];
+            } catch (e) {
+                errorMsg('Bad file format');
+                return;
+            }
+            loadJSONTask(train, test);
+            //$('#load_task_file_input')[0].value = "";
+            infoMsg("Loaded task training/" + task["name"]);
+            display_task_name(task['name'], task_index, tasks.length);
+        })
+        .error(function(){
+          errorMsg('Error loading task');
+        });
+    })
+    .error(function(){
+      errorMsg('Error loading task list');
+    });
+}
+
+function goToIndex(task_index = 0) {
+    var subset = "training";
+    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+        var task = tasks[task_index];
+        $.getJSON(task["download_url"], function(json) {
+            try {
+                train = json['train'];
+                test = json['test'];
+            } catch (e) {
+                errorMsg('Bad file format');
+                return;
+            }
+            loadJSONTask(train, test);
+            //$('#load_task_file_input')[0].value = "";
+            infoMsg("Loaded task training/" + task["name"]);
+            display_task_name(task['name'], task_index, tasks.length);
+        })
+        .error(function(){
+          errorMsg('Error loading task');
+        });
+    })
+    .error(function(){
+      errorMsg('Error loading task list');
+    });
+}
+
+function goToIndexInInput() {
+    var task_index = Number(document.querySelector('[name=task_index]').value)
+    goToIndex(task_index)
 }
 
 function nextTestInput() {
@@ -256,17 +330,27 @@ function initializeSelectable() {
     toolMode = $('input[name=tool_switching]:checked').val();
     if (toolMode == 'select') {
         infoMsg('Select some cells and click on a color to fill in, or press C to copy');
-        $('.selectable_grid').selectable(
-            {
-                autoRefresh: false,
-                filter: '> .row > .cell',
-                start: function(event, ui) {
-                    $('.ui-selected').each(function(i, e) {
-                        $(e).removeClass('ui-selected');
-                    });
-                }
-            }
-        );
+        $('.selectable_grid').selectable({
+            autoRefresh: false,
+            filter: '> .row > .cell',
+            start: function(event, ui) {
+                $('.ui-selected').each(function(i, e) {
+                    $(e).removeClass('ui-selected');
+                });
+            },
+        });
+    } else if (toolMode == 'multiselect') {
+        infoMsg('Select some cells, and they will be filled automatically with the selected symbol');
+        $('.selectable_grid').selectable({
+            autoRefresh: false,
+            filter: '> .row > .cell',
+            stop: function(event, ui) {
+                let symbol = getSelectedSymbol();
+                $('.ui-selected').each(function(i, cell) {
+                    setCellSymbol($(cell), symbol);
+                });
+            },
+        });
     }
 }
 
