@@ -44,9 +44,9 @@
                 <div id="evaluation_output_editor">
 
                     <div id="load_task_control_btns">
-                        <label for="load_task_file_input">Load task JSON: </label>
+                        <label for="load_task_file_input">New task: </label>
                         <input type="file" id="load_task_file_input" class="load_task" style="display: none;"/>
-                        <input type="button" value="Browse..." onclick="document.getElementById('load_task_file_input').click();" />
+                        <!-- <input type="button" value="Browse..." onclick="document.getElementById('load_task_file_input').click();" /> -->
                         <button onclick="randomTask()" id="random_task_btn"> Random... </button>
                         <button onclick="nextTask()" id="random_task_btn"> Next... </button>
                         <p>
@@ -66,7 +66,7 @@
                             </div>
 
                             <button onclick="copyFromInput()">Copy from input</button>
-                            <button onclick="resetOutputGrid()">Reset grid</button>
+                            <button onclick="resetOutputGrid()">Clear grid</button>
                             <button onclick="submitSolution()" id="submit_solution_btn">Submit!</button>
                         </div>
 

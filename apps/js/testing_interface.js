@@ -135,6 +135,7 @@ function loadJSONTask(train, test) {
     CURRENT_TEST_PAIR_INDEX = 0;
     $('#current_test_input_id_display').html('1');
     $('#total_test_input_count_display').html(test.length);
+    copyFromInput()
 }
 
 function display_task_name(task_name, task_index, number_of_tasks) {
