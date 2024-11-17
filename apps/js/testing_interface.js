@@ -181,6 +181,7 @@ function loadTaskFromFile(e) {
 }
 
 function randomTask() {
+    $('#modal_bg').hide();
     var subset = "training";
     $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
         var task_index = Math.floor(Math.random() * tasks.length)
