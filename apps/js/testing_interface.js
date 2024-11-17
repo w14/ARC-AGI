@@ -180,13 +180,28 @@ function loadTaskFromFile(e) {
     reader.readAsText(file);
 }
 
+function getJSONCached(url, callback) {
+    const errorFunction = (f) => f()
+
+    if (localStorage[url] !== undefined) {
+        requestAnimationFrame(() => callback(JSON.parse(localStorage[url])))
+    } else {
+        $.getJSON(url, (result) => {
+            localStorage[url] = JSON.stringify(result)
+            callback(result)
+        })
+    }
+
+    return { error: errorFunction }
+}
+
 function randomTask() {
     $('#modal_bg').hide();
     var subset = "training";
-    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
         var task_index = Math.floor(Math.random() * tasks.length)
         var task = tasks[task_index];
-        $.getJSON(task["download_url"], function(json) {
+        getJSONCached(task["download_url"], function(json) {
             try {
                 train = json['train'];
                 test = json['test'];
@@ -210,7 +225,7 @@ function randomTask() {
 
 function nextTask() {
     var subset = "training";
-    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
         var old_index = tasks.findIndex(task => task.name === current_task_name)
         var task_index
         if (current_task_name === undefined) {
@@ -223,7 +238,41 @@ function nextTask() {
         }
 
         var task = tasks[task_index];
-        $.getJSON(task["download_url"], function(json) {
+        getJSONCached(task["download_url"], function(json) {
+            try {
+                train = json['train'];
+                test = json['test'];
+            } catch (e) {
+                errorMsg('Bad file format');
+                return;
+            }
+            loadJSONTask(train, test);
+            //$('#load_task_file_input')[0].value = "";
+            infoMsg("Loaded task training/" + task["name"]);
+            display_task_name(task['name'], task_index, tasks.length);
+        })
+        .error(function(){
+          errorMsg('Error loading task');
+        });
+    })
+    .error(function(){
+      errorMsg('Error loading task list');
+    });
+}
+
+function loadTaskFrom({ task_name, task_index }) {
+    var subset = "training";
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+        if (task_index === undefined) {
+            task_index = tasks.findIndex(task => task.name === task_name)
+        }
+
+        if (task_index === -1) {
+            alert('no such task ' + JSON.stringify(task_name))
+        }
+
+        var task = tasks[task_index];
+        getJSONCached(task["download_url"], function(json) {
             try {
                 train = json['train'];
                 test = json['test'];
@@ -247,9 +296,9 @@ function nextTask() {
 
 function goToIndex(task_index = 0) {
     var subset = "training";
-    $.getJSON("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
         var task = tasks[task_index];
-        $.getJSON(task["download_url"], function(json) {
+        getJSONCached(task["download_url"], function(json) {
             try {
                 train = json['train'];
                 test = json['test'];
@@ -465,3 +514,88 @@ $(document).ready(function () {
         }
     });
 });
+
+let easyTaskIndex = 0
+easyTasks = [
+    [ '6d0aefbc.json', 0.7741935483870968, 62 ],
+    [ '67e8384a.json', 0.5652173913043478, 23 ],
+    [ '2dc579da.json', 0.4748201438848921, 139 ],
+    [ 'e9afcf9a.json', 0.45977011494252873, 87 ],
+    [ '25ff71a9.json', 0.2857142857142857, 35 ],
+    [ '6773b310.json', 0.19491525423728814, 118 ],
+    [ '44f52bb0.json', 0.18115942028985507, 138 ],
+    [ 'ded97339.json', 0.1794871794871795, 39 ],
+    [ 'b60334d2.json', 0.15, 20 ],
+    [ '4258a5f9.json', 0.1, 20 ],
+    [ '2013d3e2.json', 0.09523809523809523, 21 ],
+    [ '5614dbcf.json', 0.08695652173913043, 23 ],
+    [ '49d1d64f.json', 0.08333333333333333, 24 ],
+    [ '95990924.json', 0.08, 25 ],
+    [ 'b91ae062.json', 0.07692307692307693, 26 ],
+    [ '32597951.json', 0.06666666666666667, 30 ],
+    [ 'be94b721.json', 0.05660377358490566, 53 ],
+    [ 'd037b0a7.json', 0.056179775280898875, 89 ],
+    [ '017c7c7b.json', 0.05405405405405406, 37 ],
+    [ 'bdad9b1f.json', 0.05357142857142857, 56 ],
+    [ 'd631b094.json', 0.05, 20 ],
+    [ 'd364b489.json', 0.05, 20 ],
+    [ 'aedd82e4.json', 0.05, 20 ],
+    [ 'ba97ae07.json', 0.038461538461538464, 26 ],
+    [ '3bd67248.json', 0.03508771929824561, 57 ],
+    [ 'a87f7484.json', 0.034482758620689655, 29 ],
+    [ '74dd1130.json', 0.034482758620689655, 29 ],
+    [ '68b16354.json', 0.022222222222222223, 45 ],
+    [ '28bf18c6.json', 0.014925373134328358, 67 ],
+    [ '6150a2bd.json', 0.0136986301369863, 73 ],
+]
+
+console.log('there')
+window.onload = () => {
+    console.log('here')
+    document.body.addEventListener('keydown', (e) => {
+        console.log(e)
+        if (e.key.toLowerCase() === 'l') {
+            e.preventDefault()
+            e.stopPropagation()
+            const task = easyTasks[easyTaskIndex]
+            console.log('easy task', easyTaskIndex, task)
+            easyTaskIndex += 1
+            loadTaskFrom({ "task_name": task[0] })
+            // const taskName = prompt('Enter task name')
+            // if (taskName !== null) {
+            //     loadTaskFrom(taskName)
+            // }
+        } else if (e.key.toLowerCase() === 'o') {
+            e.preventDefault()
+            e.stopPropagation()
+            const taskName = prompt('Enter task name')
+            if (taskName !== null) {
+                loadTaskFrom(taskName)
+            }
+        }
+    })
+}
+
+window.addEventListener('load', () => {
+    const params = new URL(location).searchParams
+    if (params.get('problem_index')) {
+        document.getElementById('modal_bg').style.display = 'none';
+        $('#modal_bg').hide();
+        console.log(1);
+        const index = Number(params.get('problem_index'))
+        console.log(2);
+        loadTaskFrom({ "task_index": index });
+        console.log(3);
+        console.log('hide');
+    }
+
+    requestAnimationFrame(() => {
+        document.body.style.display = 'block'
+    });
+
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/training", (tasks) => {
+        for (const task of tasks) {
+            setInterval((() => getJSONCached(task['download_url'], () => {})), 300)
+        }
+    });
+})
