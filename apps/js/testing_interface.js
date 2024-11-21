@@ -223,6 +223,42 @@ function randomTask() {
     });
 }
 
+function prevTask() {
+    var subset = "training";
+    getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
+        var old_index = tasks.findIndex(task => task.name === current_task_name)
+        var task_index
+        if (current_task_name === undefined) {
+            task_index = 0
+        } else if (old_index === 0) {
+            return
+        } else {
+            task_index = old_index - 1
+        }
+
+        var task = tasks[task_index];
+        getJSONCached(task["download_url"], function(json) {
+            try {
+                train = json['train'];
+                test = json['test'];
+            } catch (e) {
+                errorMsg('Bad file format');
+                return;
+            }
+            loadJSONTask(train, test);
+            //$('#load_task_file_input')[0].value = "";
+            infoMsg("Loaded task training/" + task["name"]);
+            display_task_name(task['name'], task_index, tasks.length);
+        })
+        .error(function(){
+          errorMsg('Error loading task');
+        });
+    })
+    .error(function(){
+      errorMsg('Error loading task list');
+    });
+}
+
 function nextTask() {
     var subset = "training";
     getJSONCached("https://api.github.com/repos/fchollet/ARC/contents/data/" + subset, function(tasks) {
@@ -572,6 +608,16 @@ window.onload = () => {
             if (taskName !== null) {
                 loadTaskFrom(taskName)
             }
+        } else if ([ 'ArrowLeft', 'ArrowUp' ].includes(e.key)) {
+            console.log(1)
+            e.preventDefault()
+            e.stopPropagation()
+            prevTask()
+        } else if ([ 'ArrowRight', 'ArrowDown' ].includes(e.key)) {
+            console.log(2)
+            e.preventDefault()
+            e.stopPropagation()
+            nextTask()
         }
     })
 }

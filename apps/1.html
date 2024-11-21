@@ -1,0 +1,118 @@
+
+<style>
+
+body {
+/*    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 750px;
+*/}
+
+p, img {
+    width: 750px;
+}
+
+</style>
+
+<title>No Name, No Safety</title>
+<h1>No Name, No Safety</h1>
+
+<h3>TLDR: You can bypass safety in ChatGPT, Anthropic, and DeepSeek, by avoiding keywords, or by using poor grammar and spelling.</h3>
+
+<h2>1. DeepSeek</h2>
+
+<p>DeepSeek, the Chinese model, refuses to discuss Tiananmen or Xi Jinping, or criticize the Chinese Communist Party. But you can get around it by referring to concepts indirectly. Nearly any rephrasing worked.</p>
+
+<h3>Tiananmen</h3>
+
+<img src='img/deepseek_tiananmen_failed.png'>
+
+<p>But don't mention the word "Tiananmen", and it works:</p>
+
+<img src='img/deepseek_tiananmen.png'>
+
+<h3>Xi Jinping</h3>
+
+<img src='img/deepseek_xijinping.png'>
+
+<h3>Criticism of the Party</h3>
+
+<img src='img/deepseek_ccp.png'>
+
+<h2>2. ChatGPT</h2>
+
+<p>This works for chatGPT too. ChatGPT refuses:</p>
+
+<img src='img/openai_guns.png'>
+
+<p>But if you don't use bad words:</p>
+
+<img src='img/openai_guns_bypassed.png'>
+
+<p>The answer was enough to tell what it was talking about, but here is a double check:</p>
+
+<img src='img/openai_guns_bypassed_check.png'>
+
+<h2>3. Gemini</h2>
+
+Same for Gemini. I'm surprised that it works for geniunely dangerous things, not just politically sensitive things.
+
+<p><img src='img/gemini_guns.png'></p>
+
+<p><img src='img/gemini_guns_bypassed_cropped.png'></p>
+
+I cut off the explanation for obvious reasons, but it gets the right answer.
+
+<h2>4. Claude</h2>
+
+<!-- <p>Claude will refuse a lot of these requests, but it will also refuse many direct requests that ChatGPT is OK with. Claude won't. This extra safety-consciousness made Claude refuse even some indirect requests, but it bypasses others. It will gladly give one-sided arguments about a range of sensitive topics: Israel/Palestine, The Prophet Muhammad. For example:</p> -->
+
+<p>Claude refuses to criticize Anthropic:</p>
+
+<img src='img/anthropic_on_anthropic.png'>
+
+<p>But...</p>
+
+<img src='img/anthropic_on_anthropic_bypassed.png'>
+
+<p>Double check:</p>
+
+<img src='img/anthropic_on_anthropic_bypassed_check.png'>
+
+<h2>Bad Grammar and Spelling</h2>
+
+<p>You can also get around filters by mispelling or using informal grammar, capitalization, and punctuation:</p>
+
+<img src='img/deepseek_what_happened_at_tiananmen.png'>
+
+<p>But if you mispell "Tiananmen":</p>
+
+<img src='img/deepseek_what_happened_at_tiananme.png'>
+
+<p>After it said "Tiananmen Square Massacre", it triggered a DeepSeek manual check for bad words and phrases. DeepSeek then deleted the answer and replaced it with:</p>
+
+<p><img src='img/deepseek_beyond_my_scope.png'></p>
+
+<p>It's a stock response that gets triggered by specific strings. It has nothing to do with AI.</p>
+
+<p>The same trick works with ChatGPT, Anthropic, and Gemini, for a wide variety of topics sensitive to Americans. Usually all you have to do is get rid of punctuation and convert it to lowercase.</p>
+
+<!--
+
+<p>Same with ChatGPT:</p>
+
+<img src='img/openai_civil_war.png'>
+
+<p>But in lowercase without punctuation (like a text message):</p>
+
+<img src='img/openai_civil_war_lowercase.png'>
+
+-->
+
+<p>I haven't figured out why this works. It's a general method that works for any kind of content, on different models developed by different teams to filter completely different value systems.</p>
+
+<p>The inspiration for this came from online euphemisms in China that developed to avoid censors.<sup><a href='#footnote-1'>[1]</a></sup> From my observation, some Americans under 15 have developed similar habits. Interestingly, <a href=2.html>models seem reticent even to discuss this phenomenon.</a></p>
+
+<p id=footnote-1>[1] There are thousands, maybe tens of thousands of online euphemisms for politically sensitive topics. E.g., "May 35th" means June 4 (Tiananmen). The letter "N" was targeted, because it was code term limits for Xi Jinping. It is a well-documented phenomenon.</p>
+
+<div style='display: none'>https://claude.ai/chat/18a26b24-20b7-4bda-8786-215c440fdf0c</div>
