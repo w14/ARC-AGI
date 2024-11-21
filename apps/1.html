@@ -52,7 +52,25 @@ p, img {
 
 <h2 id=chatgpt>2. ChatGPT</h2>
 
-<p>It works for chatGPT too:</p>
+<p>OpenAI o1 is bad at following instructions, so you can't get it to reason in specific language. E.g. it refuses to criticize Xi Jinping without mentioning his name:</p>
+
+<p><img src='img/openai_o1_xi_jinping_censored.png'></p>
+
+<p>With some experimentation, you can get criticism, but you can't get it not to mention his name:</p>
+
+<p><img src='img/openai_o1_xi_jinping.png'></p>
+
+<p>This isn't because o1 is better at safety, but because it's worse at following instructions. GPT-4o is better at this:</p>
+
+<p><img src='img/divide_english.png'></p>
+
+<p>But o1 is much worse:</p>
+
+<p><img src='img/divide_english_o1.png'></p>
+
+<p>In order to bypass serious safety issues, you need to get it to change its language. Ironically, that means GPT-4o being a stronger model makes it easier to bypass.</p>
+
+<p>So you can get GPT-4o to say things it shouldn't by avoiding "bad" words. This fails:</p>
 
 <p><img src='img/openai_guns.png'></p>
 
@@ -65,26 +83,6 @@ p, img {
 <p><img src='img/openai_guns_bypassed_check.png'></p>
 
 <p>I'm surprised that it works for geniunely dangerous things, not just politically sensitive things.</p>
-
-<h2>o1</h2>
-
-<p>o1 is bad at following instructions, so you can't get it to reason in specific language. E.g. it refuses to criticize Xi Jinping without mentioning his name:</p>
-
-<p><img src='img/openai_o1_xi_jinping_censored.png'></p>
-
-<p>With some experimentation, you can get criticism, but you can't get it not to mention his name:</p>
-
-<p><img src='img/openai_o1_xi_jinping.png'></p>
-
-<p>GPT-4o is better at this:</p>
-
-<p><img src='img/divide_english.png'></p>
-
-<p>But o1 is much worse:</p>
-
-<p><img src='img/divide_english_o1.png'></p>
-
-<p>In order to bypass serious safety issues, you need to get it to change its language. Ironically, that means GPT-4o being a stronger model makes it easier to bypass.</p>
 
 <h2 id=gemini>3. Gemini</h2>
 
