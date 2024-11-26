@@ -6,7 +6,7 @@ body {
 }
 
 img {
-	width: 800px;
+	width: 950px;
 }
 
 </style>
