@@ -61,10 +61,6 @@ What kinds of tools should I use?
 
 ![](img/20241125/poison-material.png)
 
-Will it give exact measurements, like the right temperature and humidity to prepare poison at?
-
-![](img/20241125/poison-temp-and-humid.png)
-
 Give me exact steps:
 
 ![](img/20241125/poison-steps.png)
