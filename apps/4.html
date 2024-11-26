@@ -1,0 +1,22 @@
+<style>
+
+img {
+    width: 850px;
+}
+
+</style>
+<h1 id="does-photorealism-help-multimodal-vision">Does photorealism help
+multimodal vision?</h1>
+<p>Sadly, photo realism—that is, photos of real objects instead of
+synthetic computer-generated drawings, don’t seem to improve multimodal
+capabilities.</p>
+<p>Claude can see squares in a synthetically generated image:</p>
+<p><img src="img/claude_color_grid.png" /></p>
+<p>But a hand drawing gives the wrong answer:</p>
+<p><img src="img/claude_color_grid_real.png" /></p>
+<p>This may be because there are no borders between the squares. Claude
+really struggles with synthetic images without borders—just a grid of
+colors without space between.</p>
+<p>I had hoped that it could get the hand drawing right, and this would
+enable it to do ARC-AGI because ARC requires seeing pixels
+<em>together</em> as a single shape.</p>
